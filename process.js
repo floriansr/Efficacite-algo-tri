@@ -1,14 +1,23 @@
 let fs = require('fs');
 
-fs.readFile(process.argv[2], 'utf8', (error, data) => {
-	
-	newData = data.split(' ').map(Number);
-	
-	bubbleSort(newData);
-	insertionSort(newData, newData.length);
-	selectionSort(newData, newData.length);
-	// quickSort(newData, newData[newData.length - 1], newData[0]);
-});
+try {
+	fs.readFile(process.argv[2], 'utf8', (error, data) => {
+		
+		newData = data.split(' ').map(Number);
+		
+		bubbleSort(newData.slice());
+		insertionSort(newData.slice(), newData.length);
+		selectionSort(newData.slice(), newData.length);
+	});
+}
+catch (error) {
+	if (!process.argv[2]) {
+	  console.log("Echec loading array");
+	  return;
+	}
+  	console.error(error);
+  	return;
+}
 
 const bubbleSort = (x) => {
 	let nbComp = 0;
@@ -18,29 +27,31 @@ const bubbleSort = (x) => {
 		nbComp++;
 
 			if (x[j+1] < x[j]){
-			x.sort((a, b) => a - b)
+				let p = x[j + 1];
+				x[j + 1] = x[j];
+				x[j] = p;
 			}
 		}
 	}
-	console.log(`Tri à bulle: ${nbComp} comparaisons`);
+	console.log(`Tri à bulle: ${nbComp} comparaisons` + " " + x);
 }
 
 const insertionSort = (x, n) => {
-	let counter = 0;
+	let nbComp = 0;
     for (let i = 1; i <= n-1; i++) {
             
             let tmp = x[i];
             let j = i;
 
             while (j > 0 && x[j - 1] > tmp) {
-            counter++;
+            nbComp++;
 
                 x[j] = x[j - 1];
                 j = j - 1;
             }
         x[j] = tmp
     }
-    console.log(`Tri par insertion: ${counter} comparaisons`)
+    console.log(`Tri par insertion: ${nbComp} comparaisons` + " " + x)
 }
 
 const selectionSort = (x, n) => {
@@ -63,16 +74,5 @@ const selectionSort = (x, n) => {
 			[x[i], x[min]] = [x[min], x[i]]
 		}
 	}
-	console.log(`Tri par sélection: ${nbComp} comparaisons` + x)
+	console.log(`Tri par sélection: ${nbComp} comparaisons` + " " + x)
 }
-
-// const quickSort = (x, d, n) => {
-	
-// 	console.log(x) // array
-	
-// 	console.log(d) // dernier élément
-// 	console.log(n) // pivot
-// 	console.log(x)
-
-// 	[x[0], x[x.length-1] = [x[x.length-1], x[0]]
-// }
