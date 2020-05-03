@@ -4,14 +4,26 @@ try {
 	fs.readFile(process.argv[2], 'utf8', (error, data) => {
 		
 		newData = data.split(' ').map(Number);
+
+		for (let i = 0; i < newData.length; i++){  // check for valid file (only numbers)
 		
-		bubbleSort(newData.slice());
+			value = parseFloat(newData[i])
+
+			if (!value && value !== 0){
+			return console.log("Bad args in file");
+			}
+		}
+		
+		bubbleSort(newData.slice()); // slice pour ne pas modifier le tableau original
 		insertionSort(newData.slice(), newData.length);
 		selectionSort(newData.slice(), newData.length);
+
+		//recursive function, have to call function with console.log if array return is required
+		// console.log(quickSort(newData.slice(),0));
 		quickSort(newData.slice(),0);
 	});
 }
-catch (error) {
+catch (error) { // check si un fichier est load (ici : node process.js sans list.txt)
 	if (!process.argv[2]) {
 	  console.log("Echec loading array");
 	  return;
@@ -78,30 +90,31 @@ const selectionSort = (x, n) => {
 	console.log(`Tri par sélection: ${nbComp} comparaisons` + " " + x)
 }
 
-const quickSort = (origArray, counter) => {
+const quickSort = (x, counter) => {
 
-	if (origArray.length <= 1) { 
+	if (x.length <= 1) { 
 		if (counter !== undefined) {   // array côté gauche renvoit undefined
 			console.log(`Tri rapide : ${counter} comparaisons`)
 		}
-		return origArray;
+		return x;
 	} else {
 
 		let left = [];
 		let right = [];
 		let newArray = [];
-		let pivot = origArray.pop(); // La méthode pop() supprime le dernier élément d'un tableau et retourne cette valeur.
-		let length = origArray.length;
+		let pivot = x.pop(); // La méthode pop() supprime le dernier élément d'un tableau et retourne cette valeur.
+		let length = x.length;
 
 		for (let i = 0; i < length; i++) {
 
-			if (origArray[i] <= pivot) {
-				left.push(origArray[i]);
+			if (x[i] <= pivot) {
+				left.push(x[i]);
 			} else {
-				right.push(origArray[i]);
+				right.push(x[i]);
 			}
 			 counter++;
 		}
+
 		return newArray.concat(quickSort(left), pivot, quickSort(right, counter));  //on relance la fonction #récursivité avec la variable counter qu'on a incrémenté seulement du côté droit
 	}
 }
