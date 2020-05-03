@@ -8,6 +8,7 @@ try {
 		bubbleSort(newData.slice());
 		insertionSort(newData.slice(), newData.length);
 		selectionSort(newData.slice(), newData.length);
+		quickSort(newData.slice(),0);
 	});
 }
 catch (error) {
@@ -75,4 +76,32 @@ const selectionSort = (x, n) => {
 		}
 	}
 	console.log(`Tri par sélection: ${nbComp} comparaisons` + " " + x)
+}
+
+const quickSort = (origArray, counter) => {
+
+	if (origArray.length <= 1) { 
+		if (counter !== undefined) {   // array côté gauche renvoit undefined
+			console.log(`Tri rapide : ${counter} comparaisons`)
+		}
+		return origArray;
+	} else {
+
+		let left = [];
+		let right = [];
+		let newArray = [];
+		let pivot = origArray.pop(); // La méthode pop() supprime le dernier élément d'un tableau et retourne cette valeur.
+		let length = origArray.length;
+
+		for (let i = 0; i < length; i++) {
+
+			if (origArray[i] <= pivot) {
+				left.push(origArray[i]);
+			} else {
+				right.push(origArray[i]);
+			}
+			 counter++;
+		}
+		return newArray.concat(quickSort(left), pivot, quickSort(right, counter));  //on relance la fonction #récursivité avec la variable counter qu'on a incrémenté seulement du côté droit
+	}
 }
